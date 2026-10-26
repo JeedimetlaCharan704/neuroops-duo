@@ -79,13 +79,20 @@ $$SCI = \frac{(E \times I) + M}{R}$$
 
 ---
 
-## 5. Google Cloud Deployment (+0.2 Bonus Points)
+## 5. Live Deployments & Cloud Architecture
 
-* **Deployment Code:** Included in `/gcp/deploy.sh`, `/gcp/cloudbuild.yaml`, and `/terraform/main.tf`.
-* **Live Service URL:** Publicly accessible on Google Cloud Run:
-  `https://omnipay-gateway-omnipay-7x8a9b-europe-north1.a.run.app`
-* **Health Endpoint:** `/healthz`
-* **Prometheus Metrics:** `/metrics`
+* **Live Vercel Interactive Dashboard & API:**  
+  👉 **[https://neuroops-duo.vercel.app](https://neuroops-duo.vercel.app)**
+  * Interactive Dashboard: `https://neuroops-duo.vercel.app`
+  * Health Endpoint: `https://neuroops-duo.vercel.app/healthz`
+  * Prometheus Metrics: `https://neuroops-duo.vercel.app/metrics`
+  * Regional Carbon Status: `https://neuroops-duo.vercel.app/api/v1/carbon-status`
+* **GitHub Repository:**  
+  👉 **[https://github.com/JeedimetlaCharan704/neuroops-duo](https://github.com/JeedimetlaCharan704/neuroops-duo)**
+* **Google Cloud Run Deployment (+0.2 Bonus Points):**
+  * Deployment Code: Included in `/gcp/deploy.sh`, `/gcp/cloudbuild.yaml`, and `/terraform/main.tf`.
+  * Google Cloud Region: `europe-north1` (Hamina, Finland - 93% Carbon-Free Energy).
+  * Cloud Run URL: `https://omnipay-gateway-omnipay-7x8a9b-europe-north1.a.run.app`
 
 ---
 

@@ -3,6 +3,7 @@
 
 [![GitLab Duo Agent Platform](https://img.shields.io/badge/GitLab_Duo-Agent_Platform-6e49cb?logo=gitlab)](https://docs.gitlab.com/user/duo_agent_platform/)
 [![Google Cloud Run](https://img.shields.io/badge/Google_Cloud-Cloud_Run-4285f4?logo=google-cloud)](https://cloud.google.com/run)
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Live_Demo-black?logo=vercel)](https://neuroops-duo.vercel.app)
 [![Anthropic MCP](https://img.shields.io/badge/Protocol-Anthropic_MCP-black)](https://modelcontextprotocol.io/)
 [![Autonomy Level](https://img.shields.io/badge/Autonomy-100%25_Hands--Off-10b981)]()
 [![Stages Covered](https://img.shields.io/badge/DevSecOps_Stages-9_of_9_Complete-fc6d26)]()
@@ -10,7 +11,9 @@
 [![SCI Carbon Reduction](https://img.shields.io/badge/SCI_Emissions--79.7%25-green)]()
 
 > **Submission for GitLab Transcend Hackathon: "Life After Code: The path to production at the speed of imagination"**  
-> **Tracks:** Best Hands-Off Agent ($5,000) • Most Stages Covered ($5,000) • Most Environmentally Impactful ($5,000) • Google Cloud Bonus (+0.2 pts)
+> **Tracks:** Best Hands-Off Agent ($5,000) • Most Stages Covered ($5,000) • Most Environmentally Impactful ($5,000) • Google Cloud Bonus (+0.2 pts)  
+> **GitHub Repository:** [https://github.com/JeedimetlaCharan704/neuroops-duo](https://github.com/JeedimetlaCharan704/neuroops-duo)  
+> **Live Vercel Interactive Dashboard & API:** [https://neuroops-duo.vercel.app](https://neuroops-duo.vercel.app)
 
 ---
 
