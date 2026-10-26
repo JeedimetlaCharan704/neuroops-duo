@@ -1,0 +1,108 @@
+# GitLab Duo Agent Platform: 9-Stage Hands-Off DevSecOps Flow
+name: hands_off_lifecycle
+description: End-to-end autonomous flow linking issue triage, adversarial reproduction, minimal patching, security scanning, green Cloud Run canary deployment, telemetry monitoring, and SLSA governance.
+version: "1.0.0"
+
+trigger:
+  event: "incident_created_or_pushed"
+  conditions:
+    - severity: ["CRITICAL", "HIGH"]
+    - automated_remediation_enabled: true
+
+autonomy_level: "hands_off"  # Zero human in the loop required
+
+steps:
+  # STAGE 1: PLAN
+  - step: 1
+    stage: "plan"
+    agent: "triage-agent"
+    action: "analyze_incident_and_plan"
+    outputs:
+      - incident_id
+      - target_branch
+      - reproduction_strategy
+
+  # STAGE 2: CREATE
+  - step: 2
+    stage: "create"
+    agent: "adversarial-tester"
+    action: "synthesize_failing_reproduction_test"
+    inputs:
+      incident_id: "${steps[1].outputs.incident_id}"
+      reproduction_strategy: "${steps[1].outputs.reproduction_strategy}"
+    outputs:
+      - test_filepath
+      - reproduction_status
+
+  # STAGE 3: VERIFY
+  - step: 3
+    stage: "verify"
+    agent: "remediation-agent"
+    action: "synthesize_minimal_patch_and_verify"
+    inputs:
+      test_filepath: "${steps[2].outputs.test_filepath}"
+    outputs:
+      - patch_diff
+      - mutation_score_pct
+      - merge_request_id
+
+  # STAGE 4: PACKAGE
+  - step: 4
+    stage: "package"
+    action: "build_distroless_container_and_sbom"
+    runner: "gitlab-ci"
+    outputs:
+      - container_image_tag
+      - sbom_cyclonedx_hash
+
+  # STAGE 5: SECURE
+  - step: 5
+    stage: "secure"
+    agent: "secops-agent"
+    action: "zero_trust_vulnerability_audit"
+    inputs:
+      merge_request_id: "${steps[3].outputs.merge_request_id}"
+      container_image_tag: "${steps[4].outputs.container_image_tag}"
+    outputs:
+      - security_gate_status
+
+  # STAGE 6: RELEASE (Carbon-Aware Google Cloud Run)
+  - step: 6
+    stage: "release"
+    agent: "carbon-arbiter"
+    action: "select_optimal_green_region_and_deploy_canary"
+    inputs:
+      workload_type: "production_canary"
+    outputs:
+      - selected_region
+      - carbon_reduction_pct
+
+  # STAGE 7: CONFIGURE
+  - step: 7
+    stage: "configure"
+    action: "tune_runtime_concurrency_and_memory"
+    inputs:
+      target_region: "${steps[6].outputs.selected_region}"
+
+  # STAGE 8: MONITOR
+  - step: 8
+    stage: "monitor"
+    agent: "sre-telemetry-agent"
+    action: "verify_cloud_monitoring_slo_and_promote"
+    inputs:
+      target_region: "${steps[6].outputs.selected_region}"
+      image_tag: "${steps[4].outputs.container_image_tag}"
+    outputs:
+      - deployment_status
+      - active_url
+
+  # STAGE 9: GOVERN
+  - step: 9
+    stage: "govern"
+    agent: "compliance-auditor"
+    action: "generate_slsa_provenance_and_close_incident"
+    inputs:
+      incident_id: "${steps[1].outputs.incident_id}"
+    outputs:
+      - audit_id
+      - compliance_status

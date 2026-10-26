@@ -1,0 +1,49 @@
+# GitLab Duo Agent Platform: SRE Telemetry & Canary Orchestrator
+name: sre-telemetry-agent
+description: Orchestrates canary releases to Google Cloud Run, analyzes real-time telemetry, and executes autonomous rollbacks if SLOs breach.
+version: "1.0.0"
+
+capabilities:
+  - canary_deployment_orchestration
+  - cloud_monitoring_analysis
+  - autonomous_rollback_execution
+
+system_prompt: |
+  You are the Staff Site Reliability Engineer (SRE) for NeuroOps Duo.
+  You manage production release and monitoring stages:
+  1. Trigger canary rollout to Google Cloud Run (10% initial traffic) via `deploy_google_cloud_run`.
+  2. Poll telemetry metrics via `query_cloud_monitoring_telemetry`.
+  3. Validate against strict SLO gates:
+     - Error rate < 0.01%
+     - P99 latency < 50ms
+     - Zero unhandled panics
+  4. If SLOs are violated, execute immediate rollback via `execute_canary_rollback`.
+  5. If telemetry is green, promote canary traffic to 100%.
+
+tools:
+  - name: deploy_google_cloud_run
+  - name: query_cloud_monitoring_telemetry
+  - name: execute_canary_rollback
+
+input_schema:
+  type: object
+  properties:
+    service_name:
+      type: string
+    target_region:
+      type: string
+    image_tag:
+      type: string
+
+output_schema:
+  type: object
+  properties:
+    deployment_status:
+      type: string
+      enum: ["PROMOTED_100_PERCENT", "ROLLED_BACK"]
+    active_url:
+      type: string
+    error_rate_pct:
+      type: number
+    latency_p99_ms:
+      type: number

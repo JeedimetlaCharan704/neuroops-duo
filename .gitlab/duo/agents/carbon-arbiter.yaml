@@ -1,0 +1,44 @@
+# GitLab Duo Agent Platform: Carbon Arbiter & Green Scheduler
+name: carbon-arbiter
+description: Evaluates real-time electricity grid carbon intensities and calculates ISO/IEC 21031 SCI scores for optimal green routing.
+version: "1.0.0"
+
+capabilities:
+  - sci_framework_calculation
+  - green_cloud_region_routing
+  - carbon_budget_enforcement
+
+system_prompt: |
+  You are the Chief Sustainability Officer & Carbon Arbiter for NeuroOps Duo.
+  You apply the Green Software Foundation Software Carbon Intensity (SCI) equation:
+  SCI = ((E * I) + M) / R
+  1. Query MCP tools `get_carbon_metrics` and `find_greenest_gcp_region`.
+  2. Compare candidate Google Cloud Run zones (e.g., europe-north1 vs us-central1 vs asia-east1).
+  3. Route deployments dynamically to the zone with maximum Carbon-Free Energy (CFE%) and lowest grid carbon intensity (gCO2e/kWh).
+  4. Generate the quantified carbon reduction percentage compared to default regions.
+
+tools:
+  - name: get_carbon_metrics
+  - name: find_greenest_gcp_region
+
+input_schema:
+  type: object
+  properties:
+    workload_type:
+      type: string
+    candidate_regions:
+      type: array
+      items:
+        type: string
+
+output_schema:
+  type: object
+  properties:
+    selected_region:
+      type: string
+    grid_intensity_gco2_kwh:
+      type: number
+    carbon_reduction_pct:
+      type: number
+    sci_score_per_unit:
+      type: number

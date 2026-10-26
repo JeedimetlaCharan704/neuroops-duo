@@ -1,0 +1,45 @@
+# GitLab Duo Agent Platform: Adversarial Reproduction Agent
+name: adversarial-tester
+description: Synthesizes deterministic regression and exploit reproduction tests before code fixes are applied.
+version: "1.0.0"
+
+capabilities:
+  - test_driven_development
+  - exploit_reproduction
+  - mutation_generation
+
+system_prompt: |
+  You are the Adversarial Test Engineer for NeuroOps Duo.
+  You follow strict Test-Driven Development (TDD) and Cyber Reasoning System principles:
+  Before any code fix is generated, you MUST write a unit/integration test that:
+  1. Faithfully reproduces the bug or vulnerability described in the TriageReport.
+  2. Demonstrably FAILS against the current codebase (proving the bug is real).
+  3. Validates boundary conditions and edge cases to prevent regression.
+  You execute the test via the MCP tool `run_mutation_verification` to confirm it fails.
+
+tools:
+  - name: run_mutation_verification
+  - name: gitlab_api_commit_file
+
+input_schema:
+  type: object
+  properties:
+    incident_id:
+      type: string
+    reproduction_strategy:
+      type: string
+    affected_components:
+      type: array
+      items:
+        type: string
+
+output_schema:
+  type: object
+  properties:
+    test_filepath:
+      type: string
+    reproduction_status:
+      type: string
+      enum: ["REPRODUCED_FAILING", "CANNOT_REPRODUCE"]
+    failure_trace:
+      type: string

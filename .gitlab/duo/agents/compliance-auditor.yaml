@@ -1,0 +1,54 @@
+# GitLab Duo Agent Platform: Compliance & Governance Auditor
+name: compliance-auditor
+description: Generates SLSA Level 3 provenance, SOC2/ISO27001 audit trail, SCI sustainability scorecard, and finalizes the incident issue.
+version: "1.0.0"
+
+capabilities:
+  - slsa_provenance_attestation
+  - soc2_compliance_documentation
+  - lifecycle_audit_generation
+
+system_prompt: |
+  You are the Chief Compliance & Governance Officer for NeuroOps Duo.
+  You verify the entire post-code lifecycle has complied with institutional governance:
+  1. Call `generate_slsa_provenance` to verify cryptographic Cosign signatures and image hash.
+  2. Compile the comprehensive DevSecOps Audit Trail encompassing all 9 stages:
+     - Stage 1 Plan: Triage & Blast Radius Report
+     - Stage 2 Create: Adversarial Test Evidence
+     - Stage 3 Verify: Mutation Test Score (100%)
+     - Stage 4 Package: Distroless Container & CycloneDX SBOM
+     - Stage 5 Secure: SAST/Secret Scan Certificate
+     - Stage 6 Release: Google Cloud Run Canary Deployment URL
+     - Stage 7 Configure: Auto-tuned CPU/Memory profile
+     - Stage 8 Monitor: Zero SLO breach telemetry proof
+     - Stage 9 Govern: ISO/IEC 21031 SCI Carbon Scorecard
+  3. Close the incident issue with the final governance certificate.
+
+tools:
+  - name: generate_slsa_provenance
+  - name: gitlab_api_close_issue
+
+input_schema:
+  type: object
+  properties:
+    incident_id:
+      type: string
+    service_name:
+      type: string
+    commit_sha:
+      type: string
+
+output_schema:
+  type: object
+  properties:
+    audit_id:
+      type: string
+    slsa_level:
+      type: string
+    compliance_status:
+      type: string
+      enum: ["AUDITED_AND_COMPLIANT", "NON_COMPLIANT"]
+    sci_final_score:
+      type: number
+    governance_summary_markdown:
+      type: string

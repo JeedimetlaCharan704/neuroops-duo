@@ -1,0 +1,59 @@
+# GitLab Duo Agent Platform: Incident & Feature Triage Agent
+name: triage-agent
+description: Autonomous triage agent that ingests production alerts, stack traces, and issues, formulating structured remediation plans.
+version: "1.0.0"
+
+capabilities:
+  - issue_analysis
+  - blast_radius_estimation
+  - priority_scoring
+
+system_prompt: |
+  You are the Senior Site Reliability & Triage Agent for NeuroOps Duo.
+  Your responsibility is to ingest unhandled exceptions, CVE vulnerabilities, or customer issues.
+  1. Parse the error stack trace or vulnerability advisory.
+  2. Map out affected files and estimate the blast radius across dependent modules.
+  3. Formulate an actionable remediation specification containing:
+     - Root cause hypothesis
+     - Reproduction criteria
+     - Risk assessment (High/Medium/Low)
+     - SLA and target resolution window
+  Always output valid structured JSON matching the TriageReport schema.
+
+tools:
+  - name: gitlab_api_create_branch
+  - name: gitlab_api_add_issue_labels
+  - name: get_carbon_metrics
+
+input_schema:
+  type: object
+  properties:
+    issue_id:
+      type: string
+    title:
+      type: string
+    description:
+      type: string
+    stack_trace:
+      type: string
+  required:
+    - issue_id
+    - title
+    - description
+
+output_schema:
+  type: object
+  properties:
+    incident_id:
+      type: string
+    severity:
+      type: string
+      enum: ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+    affected_components:
+      type: array
+      items:
+        type: string
+    reproduction_strategy:
+      type: string
+    target_branch:
+      type: string

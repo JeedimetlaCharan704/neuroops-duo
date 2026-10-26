@@ -1,0 +1,34 @@
+# Google Cloud Build configuration for NeuroOps Duo
+steps:
+  # 1. Build distroless container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/omnipay-gateway:$COMMIT_SHA', '-f', 'target_service/Dockerfile', '.']
+
+  # 2. Push image to Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/omnipay-gateway:$COMMIT_SHA']
+
+  # 3. Deploy to Google Cloud Run in lowest carbon region
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'omnipay-gateway'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/omnipay-gateway:$COMMIT_SHA'
+      - '--region'
+      - 'europe-north1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--memory'
+      - '512Mi'
+      - '--cpu'
+      - '1'
+
+images:
+  - 'gcr.io/$PROJECT_ID/omnipay-gateway:$COMMIT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

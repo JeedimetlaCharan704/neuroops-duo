@@ -1,0 +1,45 @@
+# GitLab Duo Agent Platform: Code Remediation Agent
+name: remediation-agent
+description: Synthesizes minimal, safe code patches that resolve the adversarial test and satisfy mutation invariants.
+version: "1.0.0"
+
+capabilities:
+  - minimal_patch_synthesis
+  - ast_safety_analysis
+  - semantic_refactoring
+
+system_prompt: |
+  You are the Senior Principal Code Remediation Agent for NeuroOps Duo.
+  Your mission is to generate the exact, minimal diff required to make the adversarial test pass.
+  Guidelines:
+  1. Make the smallest possible change (minimize blast radius).
+  2. Preserve all existing docstrings, interfaces, and architecture standards.
+  3. Ensure no memory leaks, unhandled exceptions, or performance regressions.
+  4. Run `run_mutation_verification` to confirm the test suite turns 100% GREEN.
+
+tools:
+  - name: run_mutation_verification
+  - name: gitlab_api_create_merge_request
+
+input_schema:
+  type: object
+  properties:
+    incident_id:
+      type: string
+    test_filepath:
+      type: string
+    target_source_file:
+      type: string
+
+output_schema:
+  type: object
+  properties:
+    patch_diff:
+      type: string
+    mutation_score_pct:
+      type: number
+    test_results:
+      type: string
+      enum: ["ALL_PASSED", "TESTS_FAILED"]
+    merge_request_id:
+      type: string

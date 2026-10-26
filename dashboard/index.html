@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeuroOps Duo | Autonomous DevSecOps & Carbon-Adaptive Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --accent: #fc6d26; /* GitLab Orange */
+      --gitlab-purple: #6e49cb;
+      --gcp-blue: #4285f4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      padding: 24px;
+      line-height: 1.5;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 24px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--accent), var(--gitlab-purple));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: white;
+    }
+    .brand h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+    .brand p { font-size: 13px; color: var(--text-muted); }
+    .badge-bar { display: flex; gap: 10px; }
+    .badge {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--card-border);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge.green { border-color: rgba(16, 185, 129, 0.4); color: var(--success); }
+    .badge.purple { border-color: rgba(110, 73, 203, 0.4); color: #c4b5fd; }
+    .badge.blue { border-color: rgba(66, 133, 244, 0.4); color: var(--gcp-blue); }
+
+    .grid-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .metric-title { font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+    .metric-value { font-size: 26px; font-weight: 700; margin: 6px 0; font-family: 'JetBrains Mono', monospace; }
+    .metric-sub { font-size: 12px; color: var(--success); display: flex; align-items: center; gap: 4px; }
+
+    .trigger-bar {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .trigger-btn {
+      background: linear-gradient(135deg, var(--accent), #e24329);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .trigger-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    .stages-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .stages-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .stages-grid {
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      gap: 10px;
+    }
+    .stage-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px 8px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .stage-item.active {
+      border-color: var(--accent);
+      background: rgba(252, 109, 38, 0.1);
+      box-shadow: 0 0 12px rgba(252, 109, 38, 0.3);
+    }
+    .stage-item.completed {
+      border-color: var(--success);
+      background: rgba(16, 185, 129, 0.1);
+    }
+    .stage-number { font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+    .stage-name { font-size: 13px; font-weight: 600; margin-top: 4px; text-transform: capitalize; }
+    .stage-agent { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+    .stage-status {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      margin-top: 8px;
+    }
+    .stage-item.completed .stage-status { background: var(--success); }
+    .stage-item.active .stage-status { background: var(--accent); }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 20px;
+    }
+    .terminal-card, .audit-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .card-header {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .terminal-body {
+      background: #050811;
+      border: 1px solid #1a2234;
+      border-radius: 8px;
+      padding: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      height: 380px;
+      overflow-y: auto;
+      color: #94a3b8;
+    }
+    .term-line { margin-bottom: 6px; }
+    .term-info { color: #60a5fa; }
+    .term-success { color: #34d399; }
+    .term-accent { color: var(--accent); }
+    .term-sci { color: #fbbf24; }
+
+    .audit-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 13px;
+    }
+    .audit-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 10px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .audit-label { color: var(--text-muted); }
+    .audit-val { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="brand-icon">&#x26A1;</div>
+      <div>
+        <h1>NeuroOps Duo</h1>
+        <p>The 9-Stage Autonomous DevSecOps & Carbon-Adaptive Production Engine</p>
+      </div>
+    </div>
+    <div class="badge-bar">
+      <div class="badge purple"><span>&#x1F916;</span> GitLab Duo Agent Platform</div>
+      <div class="badge blue"><span>&#x2601;</span> Google Cloud Run (europe-north1)</div>
+      <div class="badge green"><span>&#x1F33F;</span> SCI: -79.7% Carbon</div>
+    </div>
+  </header>
+
+  <div class="grid-metrics">
+    <div class="metric-card">
+      <div class="metric-title">Lifecycle Autonomy</div>
+      <div class="metric-value" style="color: var(--success);">HANDS-OFF</div>
+      <div class="metric-sub">&#x2713; Zero human intervention required</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-title">Stages Automated</div>
+      <div class="metric-value">9 / 9</div>
+      <div class="metric-sub">&#x2713; Complete DevSecOps Coverage</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-title">Grid Carbon Intensity</div>
+      <div class="metric-value" style="color: #34d399;">28.4 <span style="font-size:14px;">gCO2/kWh</span></div>
+      <div class="metric-sub">&#x1F331; 93% Carbon-Free Energy (Finland)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-title">SLO Performance</div>
+      <div class="metric-value">0.00% <span style="font-size:14px;">Error</span></div>
+      <div class="metric-sub">&#x23F1; P99 Latency: 39.1ms</div>
+    </div>
+  </div>
+
+  <div class="trigger-bar">
+    <div>
+      <div style="font-weight: 600; font-size: 15px;">Simulate Production Anomaly & Zero-Day CVE</div>
+      <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+        Triggers GitLab Duo Flow -> Adversarial TDD -> Mutation Verification -> Google Cloud Run Canary -> SLSA Attestation
+      </div>
+    </div>
+    <button class="trigger-btn" id="runBtn" onclick="triggerLifecycle()">
+      <span>&#x25B6;</span> Execute 9-Stage Autonomous Loop
+    </button>
+  </div>
+
+  <div class="stages-container">
+    <div class="stages-title">
+      <span>DevSecOps 9-Stage Autonomous Pipeline Progress</span>
+      <span id="overallStatus" style="font-size: 13px; color: var(--text-muted); font-family: 'JetBrains Mono';">Ready for trigger</span>
+    </div>
+    <div class="stages-grid" id="stagesGrid">
+      <div class="stage-item" id="stage-1">
+        <div class="stage-number">01</div>
+        <div class="stage-name">Plan</div>
+        <div class="stage-agent">@triage</div>
+        <div class="stage-status"></div>
+      </div>
+      <div class="stage-item" id="stage-2">
+        <div class="stage-number">02</div>
+        <div class="stage-name">Create</div>
+        <div class="stage-agent">@adversarial</div>
+        <div class="stage-status"></div>
+      </div>
+      <div class="stage-item" id="stage-3">
+        <div class="stage-number">03</div>
+        <div class="stage-name">Verify</div>
+        <div class="stage-agent">@remediation</div>
+        <div class="stage-status"></div>
+      </div>
+      <div class="stage-item" id="stage-4">
+        <div class="stage-number">04</div>
+        <div class="stage-name">Package</div>
+        <div class="stage-agent">@ci-builder</div>
+        <div class="stage-status"></div>
+      </div>
+      <div class="stage-item" id="stage-5">
+        <div class="stage-number">05</div>
+        <div class="stage-name">Secure</div>
+        <div class="stage-agent">@secops</div>
+        <div class="stage-status"></div>
+      </div>
+      <div class="stage-item" id="stage-6">
+        <div class="stage-number">06</div>
+        <div class="stage-name">Release</div>
+        <div class="stage-agent">@carbon-arbiter</div>
+        <div class="stage-status"></div>
+      </div>
+      <div class="stage-item" id="stage-7">
+        <div class="stage-number">07</div>
+        <div class="stage-name">Configure</div>
+        <div class="stage-agent">@infra-tuning</div>
+        <div class="stage-status"></div>
+      </div>
+      <div class="stage-item" id="stage-8">
+        <div class="stage-number">08</div>
+        <div class="stage-name">Monitor</div>
+        <div class="stage-agent">@sre-telemetry</div>
+        <div class="stage-status"></div>
+      </div>
+      <div class="stage-item" id="stage-9">
+        <div class="stage-number">09</div>
+        <div class="stage-name">Govern</div>
+        <div class="stage-agent">@compliance</div>
+        <div class="stage-status"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div class="terminal-card">
+      <div class="card-header">
+        <span>Autonomous Agent Platform Execution Stream</span>
+        <span style="font-family: 'JetBrains Mono'; font-size: 11px;">MCP stdio stream active</span>
+      </div>
+      <div class="terminal-body" id="termOutput">
+        <div class="term-line term-info">[SYSTEM] NeuroOps Duo initialized. Connected to GitLab Duo Agent Platform.</div>
+        <div class="term-line term-info">[SYSTEM] MCP Tools registered: 7 tools active (SCI, Cloud Run, Telemetry, Cosign).</div>
+        <div class="term-line">[IDLE] Awaiting trigger or webhook notification...</div>
+      </div>
+    </div>
+
+    <div class="audit-card">
+      <div class="card-header">
+        <span>Cryptographic Audit & SCI Scorecard</span>
+        <span style="font-family: 'JetBrains Mono'; font-size: 11px; color: var(--success);">SLSA LEVEL 3</span>
+      </div>
+      <div class="audit-body" id="auditBody">
+        <div class="audit-row">
+          <span class="audit-label">Incident ID</span>
+          <span class="audit-val" id="auditIncident">-</span>
+        </div>
+        <div class="audit-row">
+          <span class="audit-label">Google Cloud Region</span>
+          <span class="audit-val" id="auditRegion">europe-north1</span>
+        </div>
+        <div class="audit-row">
+          <span class="audit-label">Carbon-Free Energy</span>
+          <span class="audit-val" style="color: var(--success);" id="auditCFE">93% CFE</span>
+        </div>
+        <div class="audit-row">
+          <span class="audit-label">Carbon Saved (SCI)</span>
+          <span class="audit-val" style="color: #fbbf24;" id="auditCarbonSaved">79.7%</span>
+        </div>
+        <div class="audit-row">
+          <span class="audit-label">Mutation Score</span>
+          <span class="audit-val" style="color: var(--success);" id="auditMutation">100.0%</span>
+        </div>
+        <div class="audit-row">
+          <span class="audit-label">Cosign Provenance</span>
+          <span class="audit-val" style="color: #38bdf8;" id="auditCosign">VERIFIED_VALID</span>
+        </div>
+        <div class="audit-row">
+          <span class="audit-label">Live Service URL</span>
+          <span class="audit-val" style="font-size: 11px; color: var(--gcp-blue);" id="auditUrl">-</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const stages = [
+      { num: 1, name: "Plan", log: "[STAGE 1: PLAN] Ingesting incident stack trace. Mapping AST blast-radius...", time: 600 },
+      { num: 2, name: "Create", log: "[STAGE 2: CREATE] Synthesized Adversarial reproduction test. Reproduction confirmed failing.", time: 700 },
+      { num: 3, name: "Verify", log: "[STAGE 3: VERIFY] Synthesized minimal AST patch. Mutation score 100%. All tests GREEN.", time: 800 },
+      { num: 4, name: "Package", log: "[STAGE 4: PACKAGE] Built distroless image. Generated CycloneDX 1.5 SBOM.", time: 700 },
+      { num: 5, name: "Secure", log: "[STAGE 5: SECURE] Zero-Trust SAST & dependency scan completed. 0 critical CVEs.", time: 600 },
+      { num: 6, name: "Release", log: "[STAGE 6: RELEASE] Evaluated SCI grid data. Deployed Canary to Google Cloud Run in europe-north1 (Hamina, Finland).", time: 900 },
+      { num: 7, name: "Configure", log: "[STAGE 7: CONFIGURE] Applied scale-to-zero tuning and dynamic memory concurrency allocation.", time: 500 },
+      { num: 8, name: "Monitor", log: "[STAGE 8: MONITOR] Google Cloud Monitoring error rate 0.00%, p99 39.1ms. Promoted to 100% traffic.", time: 800 },
+      { num: 9, name: "Govern", log: "[STAGE 9: GOVERN] Attested SLSA Level 3 Cosign provenance. Incident closed automatically.", time: 600 }
+    ];
+
+    function appendLog(text, cls = "") {
+      const term = document.getElementById("termOutput");
+      const div = document.createElement("div");
+      div.className = "term-line " + cls;
+      div.textContent = text;
+      term.appendChild(div);
+      term.scrollTop = term.scrollHeight;
+    }
+
+    async function triggerLifecycle() {
+      const btn = document.getElementById("runBtn");
+      btn.disabled = true;
+      btn.style.opacity = 0.5;
+
+      // Reset stages
+      for (let i = 1; i <= 9; i++) {
+        const el = document.getElementById(`stage-${i}`);
+        el.className = "stage-item";
+      }
+
+      const incId = "INC-" + Math.random().toString(16).substr(2, 6).toUpperCase();
+      document.getElementById("auditIncident").textContent = incId;
+      document.getElementById("overallStatus").textContent = "Autonomous Execution Active...";
+      appendLog(`[TRIGGER] Production Incident Detected: ${incId} (Severity: CRITICAL)`, "term-accent");
+
+      for (let i = 0; i < stages.length; i++) {
+        const s = stages[i];
+        const el = document.getElementById(`stage-${s.num}`);
+        el.className = "stage-item active";
+        appendLog(s.log, s.num === 6 ? "term-sci" : "term-info");
+
+        await new Promise(r => setTimeout(r, s.time));
+
+        el.className = "stage-item completed";
+      }
+
+      const liveUrl = "https://omnipay-gateway-omnipay-7x8a9b-europe-north1.a.run.app";
+      document.getElementById("auditUrl").textContent = liveUrl;
+      document.getElementById("overallStatus").textContent = "100% HANDS-OFF COMPLETED (9 of 9 Stages)";
+      appendLog(`[SUCCESS] 9-Stage DevSecOps loop completed. Zero human touches. Live on Google Cloud Run!`, "term-success");
+
+      btn.disabled = false;
+      btn.style.opacity = 1;
+    }
+  </script>
+</body>
+</html>

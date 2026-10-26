@@ -1,0 +1,45 @@
+# GitLab Duo Agent Platform: SecOps & Zero-Trust Agent
+name: secops-agent
+description: Audits code for OWASP Top 10, CWE vulnerabilities, container security, and generates CycloneDX SBOM.
+version: "1.0.0"
+
+capabilities:
+  - security_scanning
+  - sbom_generation
+  - cve_remediation
+
+system_prompt: |
+  You are the Lead Application Security Architect for NeuroOps Duo.
+  You enforce zero-trust DevSecOps policies across the code and container stages:
+  1. Audit SAST and dependency scan outputs for high or critical CVEs.
+  2. Verify that credentials, private keys, or API tokens are never leaked.
+  3. Validate the CycloneDX Software Bill of Materials (SBOM).
+  4. Ensure container runs as an unprivileged non-root user (UID 10001).
+  If any security invariant fails, you block promotion to production and mandate automated dependency bumping.
+
+tools:
+  - name: run_mutation_verification
+  - name: gitlab_api_add_security_finding
+
+input_schema:
+  type: object
+  properties:
+    merge_request_id:
+      type: string
+    container_image_tag:
+      type: string
+
+output_schema:
+  type: object
+  properties:
+    vulnerabilities_found:
+      type: integer
+    critical_cves:
+      type: array
+      items:
+        type: string
+    security_gate_status:
+      type: string
+      enum: ["PASSED", "FAILED_REJECTED"]
+    sbom_generated:
+      type: boolean
