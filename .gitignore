@@ -9,3 +9,9 @@ htmlcov/
 .venv
 env/
 venv/
+
+.vercel
+recorded_video/
+dashboard_test.png
+test_intro.mp3
+

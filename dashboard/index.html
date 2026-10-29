@@ -442,6 +442,47 @@
       btn.disabled = false;
       btn.style.opacity = 1;
     }
+
+    // Step-by-step controller for synchronized video demonstration recording
+    window.startDemoLifecycle = function() {
+      const btn = document.getElementById("runBtn");
+      btn.disabled = true;
+      btn.style.opacity = 0.5;
+      for (let i = 1; i <= 9; i++) {
+        const el = document.getElementById(`stage-${i}`);
+        el.className = "stage-item";
+      }
+      const incId = "INC-7F9A2B";
+      document.getElementById("auditIncident").textContent = incId;
+      document.getElementById("overallStatus").textContent = "Autonomous Execution Active...";
+      appendLog(`[TRIGGER] Production Incident Detected: ${incId} (Severity: CRITICAL)`, "term-accent");
+    };
+
+    window.advanceStage = function(stageNum) {
+      if (stageNum > 1) {
+        const prev = document.getElementById(`stage-${stageNum - 1}`);
+        if (prev) prev.className = "stage-item completed";
+      }
+      const s = stages.find(item => item.num === stageNum);
+      if (s) {
+        const el = document.getElementById(`stage-${stageNum}`);
+        if (el) el.className = "stage-item active";
+        appendLog(s.log, stageNum === 6 ? "term-sci" : "term-info");
+      }
+      if (stageNum === 9) {
+        setTimeout(() => {
+          const el9 = document.getElementById("stage-9");
+          if (el9) el9.className = "stage-item completed";
+          const liveUrl = "https://omnipay-gateway-omnipay-7x8a9b-europe-north1.a.run.app";
+          document.getElementById("auditUrl").textContent = liveUrl;
+          document.getElementById("overallStatus").textContent = "100% HANDS-OFF COMPLETED (9 of 9 Stages)";
+          appendLog(`[SUCCESS] 9-Stage DevSecOps loop completed. Zero human touches. Live on Google Cloud Run!`, "term-success");
+          const btn = document.getElementById("runBtn");
+          btn.disabled = false;
+          btn.style.opacity = 1;
+        }, 1200);
+      }
+    };
   </script>
 </body>
 </html>
