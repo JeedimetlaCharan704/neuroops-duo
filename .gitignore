@@ -14,4 +14,9 @@ venv/
 recorded_video/
 dashboard_test.png
 test_intro.mp3
+cloned_*.wav
+stitched_*.wav
+voiceover_paced.mp3
+temp_master.mp4
+
 
