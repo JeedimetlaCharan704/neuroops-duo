@@ -1,7 +1,10 @@
 # Devpost Submission Text: NeuroOps Duo
 
 **Project Title:** NeuroOps Duo: The 9-Stage Autonomous DevSecOps & Carbon-Adaptive Production Engine  
-**Tagline:** Code generation is solved. NeuroOps Duo automates everything after: a 100% hands-off, 9-stage DevSecOps engine powered by GitLab Duo, MCP, and Google Cloud Run with quantified carbon reduction.
+**Tagline:** Code generation is solved. NeuroOps Duo automates everything after: a 100% hands-off, 9-stage DevSecOps engine powered by GitLab Duo, MCP, and Google Cloud Run with quantified carbon reduction.  
+**Video Demo URL:** https://youtu.be/WFIEoiuTbbo  
+**GitHub Repository:** https://github.com/JeedimetlaCharan704/neuroops-duo  
+**Live Interactive Dashboard:** https://neuroops-duo.vercel.app  
 
 ---
 
